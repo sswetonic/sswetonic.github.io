@@ -68,8 +68,9 @@
                 This window will also have the options to be dragged around the screen and resized with the mouse if the developer wishes to enable them
              </p>
          </div>
+
          <div class="overflow-hidden content-section" id="content-window">
-             <h2 id="window">Window</h2>
+             <h1 id="window">Window</h1>
              <h5>Constructor</h5>
              <p>
                  <br>
@@ -89,53 +90,67 @@
                  <tr>
                      <td>renderableObject</td>
                      <td>Renderable</td>
-                     <td>Your API key.</td>
+                     <td>Any Renderable or subclass of Renderable (i.e. SpriteAnimateRenderable)</td>
                  </tr>
                  <tr>
                      <td>windowCam</td>
                      <td>Camera Object</td>
-                     <td>(optional) A search word to find character by name.</td>
+                     <td>Reference to the main world camera</td>
                  </tr>
                  <tr>
                      <td>xoffsetleft</td>
                      <td>number</td>
                      <td>
-                         (optional) a string array of houses:
+                         Offset in pixels from the left side of the canvas
                      </td>
                  </tr>
                  <tr>
                      <td>xoffsetright</td>
                      <td>number</td>
                      <td>
-                         (optional) a boolean to filter alived characters
+                        Offset in pixels from the right side of the canvas
                      </td>
                  </tr>
                  <tr>
                      <td>yoffsetbottom</td>
                      <td>number</td>
                      <td>
-                         (optional) a string to filter character by gender:<br> m: male<br> f: female
+                        Offset in pixels from the bottom of the canvas
                      </td>
                  </tr>
                  <tr>
                      <td>yoffsettop</td>
                      <td>number</td>
-                     <td>(optional - default: 0) A cursor for use in pagination. Pagination starts offset the specified offset.</td>
+                     <td>Offset in pixels from the top of the canvas</td>
                  </tr>
                  <tr>
                      <td>drag</td>
                      <td>Booolean</td>
-                     <td>(optional - default: 10) A limit on the number of objects to be returned, between 1 and 100.</td>
+                     <td>True to enable dragging functionality of the window. False to disable.</td>
                  </tr>
                  <tr>
                     <td>resize</td>
                     <td>Boolean</td>
-                    <td>(optional - default: 10) A limit on the number of objects to be returned, between 1 and 100.</td>
+                    <td>True to enable dragging resizing of the window. False to disable.</td>
                 </tr>
                  </tbody>
              </table>
 
-             <h4>Next Function</h4>
+             <h5>Initialize</h5>
+             <p>
+                <code class="higlighted">initialize()</code>
+            </p>
+            <p>
+                Initializes the draggable and resizable versions of renderable if enabled.
+            </p>
+
+            <h5>setISDrag</h5>
+             <p>
+                <code class="higlighted">setISDrag(bool)</code>
+            </p>
+            <p>
+                Defines if the window is draggable or not, depending on whether the input is true or false.
+            </p>
              <table>
                 <thead>
                 <tr>
@@ -144,90 +159,349 @@
                     <th>Description</th>
                 </tr>
                 <tr>
-                    <td></td>
+                    <td>bool</td>
+                    <td>bool</td>
+                    <td>A boolean that allows the window to be draggable if set to true.</td>
                 </tr>
                 </thead>
              </table>
-         </div>
-         <div class="overflow-hidden content-section" id="content-draggable">
-             <h2 id="draggable">Draggable</h2>
+
+             <h5>setISResize</h5>
              <p>
-                 The Westeros API uses the following error codes:
-             </p>
-             <table>
-                 <thead>
-                 <tr>
-                     <th>Error Code</th>
-                     <th>Meaning</th>
-                 </tr>
-                 </thead>
-                 <tbody>
-                 <tr>
-                     <td>X000</td>
-                     <td>
-                         Some parameters are missing. This error appears when you don't pass every mandatory parameters.
-                     </td>
-                 </tr>
-                 <tr>
-                     <td>X001</td>
-                     <td>
-                         Unknown or unvalid <code class="higlighted">secret_key</code>. This error appears if you use an unknow API key or if your API key expired.
-                     </td>
-                 </tr>
-                 <tr>
-                     <td>X002</td>
-                     <td>
-                         Unvalid <code class="higlighted">secret_key</code> for this domain. This error appears if you use an API key non specified for your domain. Developper or Universal API keys doesn't have domain checker.
-                     </td>
-                 </tr>
-                 <tr>
-                     <td>X003</td>
-                     <td>
-                         Unknown or unvalid user <code class="higlighted">token</code>. This error appears if you use an unknow user <code class="higlighted">token</code> or if the user <code class="higlighted">token</code> expired.
-                     </td>
-                 </tr>
-                 </tbody>
-             </table>
-         </div>
-         <div class="overflow-hidden content-section" id="content-resizable">
-            <h2 id="resizable">Resizable</h2>
-            <p>
-                The Westeros API uses the following error codes:
+                <code class="higlighted">setISResize(bool)</code>
             </p>
+            <p>
+                Defines if the window is resizeable or not, depending on whether the input is true or false
+            </p>
+             <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>bool</td>
+                    <td>bool</td>
+                    <td>A boolean that allows the window to be resizable if set to true.</td>
+                </tr>
+                </thead>
+             </table>
+
+             <h5>getCamera</h5>
+             <p>
+                <code class="higlighted">getCamera()</code>
+            </p>
+            <p>
+                Returns the window's camera.
+            </p>
+
+            <h5>setkey</h5>
+            <p>
+               <code class="higlighted">setKey()</code>
+           </p>
+           <p>
+            Sets the window's key.
+           </p>
+            <table>
+               <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Type</th>
+                   <th>Description</th>
+               </tr>
+               <tr>
+                   <td>key</td>
+                   <td>number</td>
+                   <td>The window's numerical key (ID).</td>
+               </tr>
+               </thead>
+            </table>
+
+            <h5>getkey</h5>
+            <p>
+               <code class="higlighted">getKey()</code>
+           </p>
+           <p>
+            Returns the window's key.
+           </p>
+
+           <h5>draw</h5>
+            <p>
+               <code class="higlighted">draw(cam, objects)</code>
+           </p>
+           <p>
+            Draws the window on the inputted camera, and then draws the objects within the window on the inputted list of objects.
+           </p>
+            <table>
+               <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Type</th>
+                   <th>Description</th>
+               </tr>
+               <tr>
+                   <td>cam</td>
+                   <td>Camera</td>
+                   <td>The world camera that this window will be displayed on.</td>
+               </tr>
+               <tr>
+                <td>objects</td>
+                <td>Array</td>
+                <td>An array of objects to be displayed within the window's camera./td>
+            </tr>
+               </thead>
+            </table>
+
+            <h5>update</h5>
+            <p>
+               <code class="higlighted">update(cam)</code>
+           </p>
+           <p>
+            Draws the window object. Its dimensions are specified by the inputted world camera.
+           </p>
+            <table>
+               <thead>
+               <tr>
+                   <th>Name</th>
+                   <th>Type</th>
+                   <th>Description</th>
+               </tr>
+               <tr>
+                   <td>cam</td>
+                   <td>Camera</td>
+                   <td>The world camera that the window's dimensions will compare to.</td>
+               </tr>
+               </thead>
+            </table>
+        
+         </div>
+
+         <div class="overflow-hidden content-section" id="content-draggable">
+            <h2 id="draggable">Draggable</h2>
+            <p>
+                A class that allows a renderable to be moved by clicking and dragging the left mosue button
+            </p>
+            <h5>Constructor</h5>
+            <p>
+                <code class="higlighted">Draggable(renderableObject)</code>
+                
+            </p>
+            <p>
+                Defines a Draggable and is passed a Renderable object.
+            </p>
+            <br>
             <table>
                 <thead>
                 <tr>
-                    <th>Error Code</th>
-                    <th>Meaning</th>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>renderableObject</td>
+                    <td>Renderable</td>
+                    <td>Any Renderable or subclass of Renderable (i.e. SpriteAnimateRenderable)</td>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>X000</td>
-                    <td>
-                        Some parameters are missing. This error appears when you don't pass every mandatory parameters.
-                    </td>
-                </tr>
-                <tr>
-                    <td>X001</td>
-                    <td>
-                        Unknown or unvalid <code class="higlighted">secret_key</code>. This error appears if you use an unknow API key or if your API key expired.
-                    </td>
-                </tr>
-                <tr>
-                    <td>X002</td>
-                    <td>
-                        Unvalid <code class="higlighted">secret_key</code> for this domain. This error appears if you use an API key non specified for your domain. Developper or Universal API keys doesn't have domain checker.
-                    </td>
-                </tr>
-                <tr>
-                    <td>X003</td>
-                    <td>
-                        Unknown or unvalid user <code class="higlighted">token</code>. This error appears if you use an unknow user <code class="higlighted">token</code> or if the user <code class="higlighted">token</code> expired.
-                    </td>
-                </tr>
-                </tbody>
             </table>
+
+
+           <h5>draw</h5>
+            <p>
+               <code class="higlighted">draw(camera)</code>
+           </p>
+           <p>
+            Draws the renderable and the borders to the camera, if enabled.
+           </p>
+           <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>camera</td>
+                <td>Camera</td>
+                <td>Reference to the main world camera</td>
+            </tr>
+            </thead>
+        </table>
+
+        <h5>update</h5>
+            <p>
+               <code class="higlighted">update()</code>
+           </p>
+           <p>
+            Detects clicks in the drag area and changes renderable transform accordingly.
+           </p>
+
+           <h5>setmouseposition</h5>
+           <p>
+              <code class="higlighted">setMousePosition(x, y)</code>
+          </p>
+          <p>
+            Used to pass the mouse position to this object.
+          </p>
+          <table>
+           <thead>
+           <tr>
+               <th>Name</th>
+               <th>Type</th>
+               <th>Description</th>
+           </tr>
+           <tr>
+               <td>x</td>
+               <td>Number</td>
+               <td>Camera's WC X position</td>
+           </tr>
+           <tr>
+            <td>y</td>
+            <td>Number</td>
+            <td>Camera's WC Y position</td>
+        </tr>
+           </thead>
+           </table>
+
+           <h5>enabledragareaborder</h5>
+           <p>
+              <code class="higlighted">enableDragAreaBorder()</code>
+          </p>
+          <p>
+            Shows drag area borders
+          </p>
+          <h5>disabledragareaborder</h5>
+           <p>
+              <code class="higlighted">disableDragAreaBorder()</code>
+          </p>
+          <p>
+            Disable drag area borders
+          </p>
+
+          <h5>getxform</h5>
+           <p>
+              <code class="higlighted">getXform()</code>
+          </p>
+          <p>
+            Returns a reference to the Renderable's transform.
+          </p>
+
+         </div>
+
+
+         <div class="overflow-hidden content-section" id="content-resizable">
+            <h2 id="resizable">Resizable</h2>
+            <p>
+                A class that allows a renderable to be resized by dragging the edges with the mouse
+            </p>
+            <h5>Constructor</h5>
+            <p>
+                <code class="higlighted">Resizeable(renderableObject)</code>
+                
+            </p>
+            <p>
+                Defines a Resizeable, the renderableObject is the object Resizeable will be applied to. Borders of resize area are on by default.
+            </p>
+            <br>
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>renderableObject</td>
+                    <td>Renderable</td>
+                    <td>Any Renderable or subclass of Renderable (i.e. SpriteAnimateRenderable)</td>
+                </tr>
+                </thead>
+            </table>
+
+            <h5>initialize</h5>
+            <p>
+               <code class="higlighted">initialize()</code>
+           </p>
+           <p>
+            Initializes the Resizable.
+           </p>
+
+           <h5>draw</h5>
+            <p>
+               <code class="higlighted">draw(camera)</code>
+           </p>
+           <p>
+            Draws the renderable and the borders to the camera, if enabled.
+           </p>
+           <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>camera</td>
+                <td>Camera</td>
+                <td>Reference to the main world camera</td>
+            </tr>
+            </thead>
+        </table>
+
+        <h5>update</h5>
+            <p>
+               <code class="higlighted">update()</code>
+           </p>
+           <p>
+            Detects clicks and changes renderable transform accordingly.
+           </p>
+
+           <h5>setmouseposition</h5>
+           <p>
+              <code class="higlighted">setMousePosition(x, y)</code>
+          </p>
+          <p>
+            Used to pass the mouse position to this object.
+          </p>
+          <table>
+           <thead>
+           <tr>
+               <th>Name</th>
+               <th>Type</th>
+               <th>Description</th>
+           </tr>
+           <tr>
+               <td>x</td>
+               <td>Number</td>
+               <td>Camera's WC X position</td>
+           </tr>
+           <tr>
+            <td>y</td>
+            <td>Number</td>
+            <td>Camera's WC Y position</td>
+        </tr>
+           </thead>
+           </table>
+
+           <h5>enableresizeareaborder</h5>
+           <p>
+              <code class="higlighted">enableResizeAreaBorder()</code>
+          </p>
+          <p>
+            Shows resize borders
+          </p>
+          <h5>disableresizeareaborder</h5>
+           <p>
+              <code class="higlighted">disableResizeAreaBorder()</code>
+          </p>
+          <p>
+            Disable resize borders
+          </p>
+
+
+           
+
         </div>
      </div>
  </div>
