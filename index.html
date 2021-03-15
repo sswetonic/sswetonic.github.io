@@ -30,7 +30,7 @@
  <body class="one-content-column-version">
  <div class="left-menu">
      <div class="content-logo">
-         <img alt="Griffins Logo" title="Griffins Logo" src="images/logo.png" height="32" />
+         <img alt="Griffins Logo" title="Griffins Logo" src="images/coolicon.png" height="32" />
          <span>API Documentation</span>
      </div>
      <div class="content-menu">
@@ -342,7 +342,7 @@
                </thead>
             </table>
         
-         </div>
+         
 
          <!-- EXAMPLES -->
 
@@ -385,6 +385,12 @@ MyGame.prototype.initialize = function() {
     </code>
 </pre>
 
+<p>
+    In this example of the MyGame draw() function, the collection of objects (this.mDrawnObjects) contains
+    all the objects we want to draw. These are drawn to the main camera and passed into the draw function of
+    our WindowManager, which also uses the main camera. 
+</p>
+
 <pre>
     <code>
 MyGame1.prototype.draw = function () {
@@ -400,11 +406,8 @@ MyGame1.prototype.draw = function () {
 };
     </code>
 </pre>
-         
-         
-
-
-
+         </div>
+                  
 
          <div class="overflow-hidden content-section" id="content-window-manager">
             <h2 id="window-manager">Window Manager</h2>
@@ -702,6 +705,16 @@ MyGame1.prototype.draw = function () {
           <p>
             Returns a reference to the Renderable's transform.
           </p>
+
+          <h2>Creating a Draggable Object</h2>
+
+          <p>
+              A draggable only needs a single Renderable passed to it. This can be a basic Renderable, TextureRenderable, SpriteAnimateRenderable,
+              or anything with an update and draw function.
+          </p>
+
+
+
 
          </div>
 
