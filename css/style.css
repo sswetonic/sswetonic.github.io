@@ -26,7 +26,7 @@ time, mark, audio, video {
 article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
     display: block;
 }
-img, embed, object, video { max-width: 100%; }
+img, embed, object, video { max-width: 100%; padding: 15px;}
 .ie6 img.full, .ie6 object.full, .ie6 embed, .ie6 video { width: 100%; }
 
 /* BASE
@@ -243,7 +243,7 @@ pre{
     color: #fff;
     padding: 0 28px 2em;
     margin: 0;
-    width: 50%;
+    width: 75%;
     box-sizing: border-box;
 }
 .content pre code, .content pre {
@@ -285,6 +285,7 @@ pre{
     font-weight: 300;
     color: #777A7A;
 }
+
 
 /* ONE CONTENT COLUMN VERSION
 ----------------------------------------------------------------------------------------*/

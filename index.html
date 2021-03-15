@@ -9,7 +9,7 @@
  
  <head>
      <meta charset="utf-8">
-     <title>API - Documentation</title>
+     <title>Window API Documentation - The Griffins</title>
      <meta name="description" content="">
      <meta name="author" content="ticlekiwi">
  
@@ -31,7 +31,7 @@
  <div class="left-menu">
      <div class="content-logo">
          <img alt="Griffins Logo" title="Griffins Logo" src="images/coolicon.png" height="32" />
-         <span>API Documentation</span>
+         <span>Window API</span>
      </div>
      <div class="content-menu">
          <ul>
@@ -54,8 +54,8 @@
  
  <div class="content-page">
      <div class="content">
-         <div class="overflow-hidden content-section" id="content-window">
-             <h1 id="window">The Griffins</h1>
+         <div class="overflow-hidden content-section" id="content-introduction">
+             <h1 id="introduction">The Griffins</h1>
              <h3>By Stephen Swetonic, Weston Goggins, and Connor Goan</h3>
              <h3>March 15th, 2021</h3>
              <p>
@@ -63,13 +63,21 @@
              </p>
              <p>
                 This webiste documents the API for a basic window object, a Draggable object, and a Resizable object that add their named functionality.
-                Class definitions, example code, and demos are presented here to demonstrate this project.
+                Class definitions, example code, and demos are presented here to demonstrate this project. WindowManager and Window allow the creation of in-game windows, which are a combination of renderable borders and a camera.
+                The Draggable class allows windows and other objects to be dragged with the mouse.
+                The Resizeable class allows windows and other objects to be dynamically resized with the mouse.
              </p>
              <p>
                 The window object is associated with it’s own camera, allowing the developer to present what they wish within the window while allowing that window
                 to keep the same position relative to the canvas, not the main camera. 
                 This window will also have the options to be dragged around the screen and resized with the mouse if the developer wishes to enable them
              </p>
+             <h5 id="demo">Demonstration of our project: 
+             <a href="public_html/index.html">DEMO</a>
+             </h5>
+             <img src="images/demo1.png" alt="" width="30%">
+             <img src="images/demo2.png" alt="" width="30%">
+             <img src="images/demo3.png" alt="" width="30%">
          </div>
 
          <div class="overflow-hidden content-section" id="content-window">
@@ -77,7 +85,7 @@
              <h5>Constructor</h5>
              <p>
                  <br>
-                 <code class="higlighted">Window(renderableObject, windowCam, xoffsetleft, xoffsetright, yoffsetbottom, yoffsettop, drag, resize)</code>
+                 <code class="higlighted">Window(renderableObject, windowCam, worldCam, xoffsetleft, xoffsetright, yoffsetbottom, yoffsettop, drag, resize)</code>
              </p>
              <br>
              <h4>PARAMETERS</h4>
@@ -98,8 +106,13 @@
                  <tr>
                      <td>windowCam</td>
                      <td>Camera Object</td>
-                     <td>Reference to the main world camera</td>
+                     <td>The camera for the window. Dimensions will not stay the same.</td>
                  </tr>
+                 <tr>
+                    <td>worldCam</td>
+                    <td>Camera Object</td>
+                    <td>The world camera that the window will be drawn upon</td>
+                </tr>
                  <tr>
                      <td>xoffsetleft</td>
                      <td>number</td>
@@ -149,10 +162,10 @@
 
             <h5>setdragarea</h5>
              <p>
-                <code class="higlighted">setDragArea(xOffset, yOffset, width, height)</code>
+                <code class="higlighted">setDragArea(width, height)</code>
             </p>
             <p>
-                Defines an area based on an offset position from the  window WC center.
+                Defines the dimensions of the drag area. The drag area is position to be at the top of the window.
             </p>
             <table>
                 <thead>
@@ -161,16 +174,6 @@
                     <th>Type</th>
                     <th>Description</th>
                 </tr>
-                <tr>
-                    <td>xOffset</td>
-                    <td>Number</td>
-                    <td>X Offset in WC from renderable center position</td>
-                </tr>
-                <tr>
-                 <td>yOffset</td>
-                 <td>Number</td>
-                 <td>Y Offset in WC from renderable center position</td>
-             </tr>
              <tr>
                 <td>width</td>
                 <td>Number</td>
@@ -183,6 +186,8 @@
             </tr>
                 </thead>
                 </table>
+
+
 
                 <h5>setmouseposition</h5>
                 <p>
@@ -362,7 +367,8 @@ MyGame.prototype.initialize = function() {
     // Create TextureRenderable
     this.box = new TextureRenderable(this.kWindowSprite);
     this.box.setColor([1, 1, 1, 0]);
-    this.box.getXform().setPosition(this.mCamera.getWCCenter()[0] + ((Math.random() * 80) - 40), this.mCamera.getWCCenter()[1] + ((Math.random() * 60) - 30));
+    this.box.getXform().setPosition(this.mCamera.getWCCenter()[0] + ((Math.random() * 80) - 40), 
+        this.mCamera.getWCCenter()[1] + ((Math.random() * 60) - 30));
     this.box.getXform().setSize(20, 15);
 
     // Create a camera for the window
@@ -386,14 +392,19 @@ MyGame.prototype.initialize = function() {
 </pre>
 
 <p>
-    In this example of the MyGame draw() function, the collection of objects (this.mDrawnObjects) contains
+    In this example of the MyGame update() and draw() function, the collection of objects (this.mDrawnObjects) contains
     all the objects we want to draw. These are drawn to the main camera and passed into the draw function of
-    our WindowManager, which also uses the main camera. 
+    our WindowManager, which also uses the main camera. Note that setMousePosition() does not need to be called here, it is called
+    from WindowManager.update().
 </p>
 
 <pre>
     <code>
-MyGame1.prototype.draw = function () {
+MyGame.prototype.update = function() {
+    this.mWindows.update(this.mCamera);
+}
+
+MyGame.prototype.draw = function () {
     // Step A: clear the canvas
     gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
 
@@ -712,7 +723,56 @@ MyGame1.prototype.draw = function () {
               A draggable only needs a single Renderable passed to it. This can be a basic Renderable, TextureRenderable, SpriteAnimateRenderable,
               or anything with an update and draw function.
           </p>
+<pre>
+    <code>
+MyGame.prototype.initialize = function () {
+    // Step A: set up the cameras
+    this.mCamera = new Camera(
+            vec2.fromValues(30, 30), // position of the camera
+            100, // width of camera
+            [0, 0, 640, 480]           // viewport (orgX, orgY, width, height)
+            );
+    this.mCamera.setBackgroundColor([0.8, 0.8, 0.8, 1]);
+    // sets the background to gray
 
+    // Create a SpriteAnimateRenderable
+    this.mSpriteAnimate = new SpriteAnimateRenderable(this.kSpriteSheet);
+    this.mSpriteAnimate.setColor([1, 1, 1, 0]);
+    this.mSpriteAnimate.getXform().setPosition(this.mSpawnX, this.mSpawnY);
+    this.mSpriteAnimate.setAnimationType(SpriteAnimateRenderable.eAnimationType.eAnimateRight);
+    this.mSpriteAnimate.setAnimationSpeed(50);
+    this.mSpriteAnimate.getXform().setPosition(10, 10);
+    this.mSpriteAnimate.getXform().setSize(12, 10);
+    this.mSpriteAnimate.setSpriteSequence(512, 0, // first element pixel position: top-left 512 is top of image, 0 is left of image
+            204, 164, // widthxheight in pixels
+            5, // number of elements in this sequence
+            0);
+    
+    // Create a Draggable and pass in our SpriteAnimateRenderable
+    this.mDragTest = new Draggable(this.mSpriteAnimate, this.mCamera);
+    this.mDragTest.setDragArea(0, 4, 10, 2);
+};
+    </code>
+</pre>
+
+<p>
+    In our update function, we only need to call Draggable's update function and call setMousePosition(x, y) so the object gets the current
+    mouse position. Don't forget to call the SpriteAnimateRenderable's update animation function so it animates. Drawing is similarly simple, 
+    just call draw on the Draggable.
+</p>
+<pre>
+    <code>
+MyGame.prototype.update = function() {
+    this.mDragTest.setMousePosition(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+    this.mSpriteAnimate.updateAnimation();
+    this.mDragTest.update();
+};
+
+MyGame.prototype.draw = function () {
+    this.mDragTest.draw(this.mCamera);
+}
+    </code>
+</pre>
 
 
 
@@ -828,7 +888,46 @@ MyGame1.prototype.draw = function () {
             Disable resize borders
           </p>
 
+          <h2>Creating a Resizable Object</h2>
 
+          <p>
+              Resizable is almost exactly the same as Draggable, just different functionality. The object takes a Renderable (or subclass)
+              and makes it resizable on every edge and corner. The resize bounds are enabled by default, but can be controlled with 
+              disable()/enable().
+          </p>
+<pre>
+    <code>
+MyGame.prototype.initialize = function () {
+    // Create a renderable
+    this.mRenderableTest = new Renderable();
+    this.mRenderableTest.setColor([1, 0, 0, 1]);
+    this.mRenderableTest.getXform().setPosition(60, 27.5);
+    this.mRenderableTest.getXform().setSize(30, 30);
+
+    // Create a resizable and pass in renderable
+    this.mResizeTest = new Resizeable(this.mRenderableTest, this.mCamera);
+    this.mResizeTest.initialize();
+
+}
+    </code>
+</pre>
+
+<p>
+    The Resizable's update and draw functions need only be called from the client update and draw functions.
+</p>
+
+<pre>
+    <code>
+MyGame.prototype.update = function() {
+    this.mResizeTest.setMousePosition(this.mCamera.mouseWCX(), this.mCamera.mouseWCY());
+    this.mResizeTest.update();
+};
+
+MyGame.prototype.draw = function () {
+    this.mResizeTest.draw(this.mCamera);
+}
+    </code>
+</pre>
            
 
         </div>
