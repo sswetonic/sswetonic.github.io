@@ -244,8 +244,6 @@ pre{
     padding: 0 28px 2em;
     margin: 0;
     width: 50%;
-    float: right;
-    clear: right;
     box-sizing: border-box;
 }
 .content pre code, .content pre {

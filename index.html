@@ -38,6 +38,9 @@
              <li class="scroll-to-link active" data-target="window">
                  <a>Window</a>
              </li>
+             <li class="scroll-to-link" data-target="window-manager">
+                <a>WindowManager</a>
+            </li>
              <li class="scroll-to-link" data-target="draggable">
                  <a>Draggable</a>
              </li>
@@ -53,7 +56,7 @@
      <div class="content">
          <div class="overflow-hidden content-section" id="content-window">
              <h1 id="window">The Griffins</h1>
-             <h3>By Stephen Swetonic, Weston Goggins, and Connor Goanc</h3>
+             <h3>By Stephen Swetonic, Weston Goggins, and Connor Goan</h3>
              <h3>March 15th, 2021</h3>
              <p>
                  Window API Project
@@ -143,6 +146,70 @@
             <p>
                 Initializes the draggable and resizable versions of renderable if enabled.
             </p>
+
+            <h5>setdragarea</h5>
+             <p>
+                <code class="higlighted">setDragArea(xOffset, yOffset, width, height)</code>
+            </p>
+            <p>
+                Defines an area based on an offset position from the  window WC center.
+            </p>
+            <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>xOffset</td>
+                    <td>Number</td>
+                    <td>X Offset in WC from renderable center position</td>
+                </tr>
+                <tr>
+                 <td>yOffset</td>
+                 <td>Number</td>
+                 <td>Y Offset in WC from renderable center position</td>
+             </tr>
+             <tr>
+                <td>width</td>
+                <td>Number</td>
+                <td>Width of the drag area in WC</td>
+            </tr>
+            <tr>
+                <td>height</td>
+                <td>Number</td>
+                <td>Height of the drag area in WC</td>
+            </tr>
+                </thead>
+                </table>
+
+                <h5>setmouseposition</h5>
+                <p>
+                   <code class="higlighted">setMousePosition(x, y)</code>
+               </p>
+               <p>
+                 Used to pass the mouse position to this object.
+               </p>
+               <table>
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Description</th>
+                </tr>
+                <tr>
+                    <td>x</td>
+                    <td>Number</td>
+                    <td>Camera's WC X position</td>
+                </tr>
+                <tr>
+                 <td>y</td>
+                 <td>Number</td>
+                 <td>Camera's WC Y position</td>
+             </tr>
+                </thead>
+                </table>
 
             <h5>setISDrag</h5>
              <p>
@@ -277,6 +344,217 @@
         
          </div>
 
+         <!-- EXAMPLES -->
+
+         <h2>Window Creation Tutorial</h2>
+         <p>
+             Creating a single window object with a texture is relatively simple. In this example, we assume this.mCamera was already defined.
+             We create a new Texture Renderable with the image below. Then create a camera to associate with the Window. The Window object is then 
+             initialized with that TextureRenderable and Camera with the dragging flag enabled.
+         </p>
+         <img src="images/computerwindow.png" width="25%">
+        
+<pre>
+    <code>
+MyGame.prototype.initialize = function() {
+    this.mWindows = new WindowManager();
+
+    // Create TextureRenderable
+    this.box = new TextureRenderable(this.kWindowSprite);
+    this.box.setColor([1, 1, 1, 0]);
+    this.box.getXform().setPosition(this.mCamera.getWCCenter()[0] + ((Math.random() * 80) - 40), this.mCamera.getWCCenter()[1] + ((Math.random() * 60) - 30));
+    this.box.getXform().setSize(20, 15);
+
+    // Create a camera for the window
+    var cam = new Camera(vec2.fromValues(30, 27.5), // position of the camera
+            20, // width of camera
+            [0, 0, 0, 0]           // viewport (orgX, orgY, width, height)
+            );
+    cam.setBackgroundColor([0.5, 0.5, 0.5, 1]);
+
+    // Create a Window, set drag area, and add to window manager
+    var window = new Window(this.box, cam, this.mCamera, 1, //Left offset
+            1, //Right offset
+            1.2, //Bottom offset
+            1.6, //Top offset
+            true, false);
+    window.initialize();
+    window.setDragArea(17.5, 5);
+    this.mWindows.add(window, true);
+}
+    </code>
+</pre>
+
+<pre>
+    <code>
+MyGame1.prototype.draw = function () {
+    // Step A: clear the canvas
+    gEngine.Core.clearCanvas([0.9, 0.9, 0.9, 1.0]); // clear to light gray
+
+    this.mCamera.setupViewProjection();
+    for (var i = 0; i < this.mDrawnObjects.length; i++) {
+        this.mDrawnObjects[i].draw(this.mCamera);
+    }
+
+    this.mWindows.draw(this.mCamera, this.mDrawnObjects);
+};
+    </code>
+</pre>
+         
+         
+
+
+
+
+         <div class="overflow-hidden content-section" id="content-window-manager">
+            <h2 id="window-manager">Window Manager</h2>
+        
+
+         <h5>Constructor</h5>
+         <p>
+             <code class="higlighted">WindowManager()</code>
+             
+         </p>
+         <p>
+             Defines a WindowManager object to store a set of windows, update, and call them all at once.
+             Additionally, the WindowManager can push a window to the front to be drawn first.
+         </p>
+         <br>
+
+         <h5>Initialize</h5>
+         <p>
+             <code class="higlighted">initialize()</code>
+             
+         </p>
+         <p>Initializes the window key to 0.</p>
+
+         <h5>add</h5>
+            <p>
+                <code class="higlighted">add(window, front)</code>
+                
+            </p>
+            <p>
+                Adds a window to the front of the list if 'front' is true, otherwise its added to the back.
+            </p>
+         
+         <table>
+             <thead>
+             <tr>
+                 <th>Name</th>
+                 <th>Type</th>
+                 <th>Description</th>
+             </tr>
+             <tr>
+                 <td>window</td>
+                 <td>Window</td>
+                 <td>The window to be added to the window list.</td>
+             </tr>
+             <tr>
+                <td>front</td>
+                <td>bool</td>
+                <td>If set to true, will layer the new window on top of all existing windows. Otherwise will be pushed to the back layer</td>
+            </tr>
+             </thead>
+         </table>
+
+         <h5>remove</h5>
+         <p>
+             <code class="higlighted">remove(window)</code>
+             
+         </p>
+         <p>
+            Removes the inputted window from the list.
+         </p>
+         <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>window</td>
+                <td>Window</td>
+                <td>The window to be removed the window list.</td>
+            </tr>
+            </thead>
+        </table>
+
+        <h5>pushtofront</h5>
+        <p>
+            <code class="higlighted">pushToFront(window)</code>
+            
+        </p>
+        <p>
+            Pushes the inputted window to the fron to list, layering it on top of other windows in the list.
+        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>window</td>
+                <td>Window</td>
+                <td>The window to be pushed in front of all other windows.</td>
+            </tr>
+            </thead>
+        </table>
+
+        <h5>draw</h5>
+        <p>
+            <code class="higlighted">draw(cam, objects)</code>
+            
+        </p>
+        <p>
+            Draws all windows in the inputted camera, and all windows display the inputted list of objects.
+        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>cam</td>
+                <td>Camera</td>
+                <td>The world camera that all windows will be drawn upon.</td>
+            </tr>
+            <tr>
+                <td>objects</td>
+                <td>Array of Renderables</td>
+                <td>An array of objects that the window cameras will draw.</td>
+            </tr>
+            </thead>
+        </table>
+
+        <h5>update</h5>
+        <p>
+            <code class="higlighted">update(cam)</code>
+            
+        </p>
+        <p>
+            Draws all windows in the inputted camera, and all windows display the inputted list of objects.
+        </p>
+        <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>cam</td>
+                <td>Camera</td>
+                <td>The world camera that all windows will be drawn upon.</td>
+            </tr>
+            </thead>
+        </table>
+         </div>
+
          <div class="overflow-hidden content-section" id="content-draggable">
             <h2 id="draggable">Draggable</h2>
             <p>
@@ -334,7 +612,8 @@
                <code class="higlighted">update()</code>
            </p>
            <p>
-            Detects clicks in the drag area and changes renderable transform accordingly.
+            Detects clicks in the drag area and changes renderable transform accordingly. The renderable will move with the mouse position after a left-menu
+            click in the drag area and will stop when the mouse button is released.
            </p>
 
            <h5>setmouseposition</h5>
@@ -363,6 +642,43 @@
         </tr>
            </thead>
            </table>
+
+           <h5>setdragarea</h5>
+           <p>
+              <code class="higlighted">setDragArea(xOffset, yOffset, width, height)</code>
+          </p>
+          <p>
+            Define the position and size of the drag area by WC offset from renderable's center.
+          </p>
+          <table>
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+            </tr>
+            <tr>
+                <td>xOffset</td>
+                <td>Number</td>
+                <td>X Offset in WC from renderable center position</td>
+            </tr>
+            <tr>
+             <td>yOffset</td>
+             <td>Number</td>
+             <td>Y Offset in WC from renderable center position</td>
+         </tr>
+         <tr>
+            <td>width</td>
+            <td>Number</td>
+            <td>Width of the drag area in WC</td>
+        </tr>
+        <tr>
+            <td>height</td>
+            <td>Number</td>
+            <td>Height of the drag area in WC</td>
+        </tr>
+            </thead>
+            </table>
 
            <h5>enabledragareaborder</h5>
            <p>
